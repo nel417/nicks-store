@@ -15,12 +15,7 @@ if(!isOpen) {
   onOpen()
 }
 }, [isOpen,onOpen])
-  return (
-    <div style={{ marginLeft: "34px" }}>
-      rootpage
-      <UserButton />
-    </div>
-  );
+return null;
 }
 
 export default SetupPage;
