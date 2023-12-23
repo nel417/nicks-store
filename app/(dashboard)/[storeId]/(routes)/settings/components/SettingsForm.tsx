@@ -1,5 +1,6 @@
 "use client";
 
+import { AlertModal } from "@/components/modals/alert-modal";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -32,26 +33,48 @@ type SettingsFormValues = z.infer<typeof formSchema>;
 const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const params = useParams()
-const router = useRouter()
+  const params = useParams();
+  const router = useRouter();
   const onSubmit = async (data: SettingsFormValues) => {
     try {
-        setLoading(true)
-        await axios.patch(`/api/stores/${params.storeId}`, data)
-        router.refresh()
-        console.log("store updated")
+      setLoading(true);
+      await axios.patch(`/api/stores/${params.storeId}`, data);
+      router.refresh();
+      console.log("store updated");
     } catch (error) {
-        console.log("something went wrong", error)
+      console.log("something went wrong", error);
     } finally {
-        setLoading(false)
+      setLoading(false);
     }
   };
+
+  const onDelete = async () => {
+    try {
+      setLoading(true);
+      await axios.delete(`/api/stores/${params.storeId}`);
+      router.refresh();
+      router.push("/");
+      console.log("store store deleted");
+    } catch (error) {
+      console.log("something went wrong", error);
+    } finally {
+      setLoading(false);
+      setOpen(false);
+    }
+  };
+
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData,
   });
   return (
     <>
+      <AlertModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onConfirm={onDelete}
+        loading={loading}
+      />
       <div className="flex items-center justify-between">
         <Heading title="Nick" description="wooooood" />
         <Button
