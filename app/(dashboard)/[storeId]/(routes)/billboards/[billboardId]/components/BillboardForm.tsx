@@ -35,17 +35,31 @@ const formSchema = z.object({
 type BillboardFormValues = z.infer<typeof formSchema>;
 
 const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
+  const title = initialData ? "Edit Billboard" : "Create Hero";
+  const desc = initialData ? "Edit a Billboard" : "Create a new Billboard";
+  const toast = initialData ? "Billboard updated" : "Billboard created";
+  const action = initialData ? "Save changes" : "Create";
+
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const params = useParams();
   const router = useRouter();
   const origin = useOrigin();
+
+
   const onSubmit = async (data: BillboardFormValues) => {
     try {
       setLoading(true);
-      await axios.patch(`/api/stores/${params.storeId}`, data);
+
+      if (initialData) {
+        await axios.patch(`/api/${params.storeId}/billboards/${params.billboardId}`, data);
+      } else {
+        await axios.post(`/api/${params.storeId}/billboards`, data);
+      }
+
       router.refresh();
-      console.log("store updated");
+      router.push(`/${params.storeId}/billboards`)
+      console.log(toast);
     } catch (error) {
       console.log("something went wrong", error);
     } finally {
@@ -56,10 +70,10 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/stores/${params.storeId}`);
+      await axios.delete(`/api/${params.storeId}/billboards/${params.billboardId}`);
       router.refresh();
       router.push("/");
-      console.log("store store deleted");
+      console.log("Billboard deleted");
     } catch (error) {
       console.log("something went wrong", error);
     } finally {
@@ -67,10 +81,7 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
       setOpen(false);
     }
   };
-  const title = initialData ? "Edit Billboard" : "Create Hero";
-  const desc = initialData ? "Edit a Billboard" : "Create a new Billboard";
-  const toast = initialData ? "Billboard updated" : "Billboard created";
-  const action = initialData ? "Save changes" : "Create";
+
 
   const form = useForm<BillboardFormValues>({
     resolver: zodResolver(formSchema),
