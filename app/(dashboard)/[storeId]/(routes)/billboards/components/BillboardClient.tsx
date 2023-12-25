@@ -24,7 +24,7 @@ const params = useParams()
         </Button>
       </div>
       <hr />
-      <DataTable columns={columns} data={data}/>
+      <DataTable columns={columns} data={data} searchKey="label"/>
     </>
   );
 };
