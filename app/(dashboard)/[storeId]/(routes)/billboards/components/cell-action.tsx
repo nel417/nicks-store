@@ -10,16 +10,18 @@ import {
 import { BillboardColumn } from "./Columns";
 import { Button } from "@/components/ui/button";
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
 
 type Props = {
   data: BillboardColumn;
 };
 
 const CellAction: React.FC<Props> = ({ data }) => {
-
-    const onCopy = (id: string) => {
-        navigator.clipboard.writeText(id);
-    }
+  const router = useRouter();
+  const params = useParams()
+  const onCopy = (id: string) => {
+    navigator.clipboard.writeText(id);
+  };
 
   return (
     <div>
@@ -32,20 +34,19 @@ const CellAction: React.FC<Props> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem>
-            <Edit className="mr-2 h-4 w-4"/>
+          <DropdownMenuItem onClick={() => router.push(`/${params.storeId}/billboards/${data.id}`)}>
+            <Edit className="mr-2 h-4 w-4" />
             update
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => onCopy(data.id)}>
-            <Copy className="mr-2 h-4 w-4"/>
+            <Copy className="mr-2 h-4 w-4" />
             copy id
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Trash className="mr-2 h-4 w-4"/>
+            <Trash className="mr-2 h-4 w-4" />
             delete
           </DropdownMenuItem>
         </DropdownMenuContent>
-
       </DropdownMenu>
     </div>
   );
