@@ -14,7 +14,6 @@ import {
 import { Heading } from "@/components/ui/heading";
 import ImageUpload from "@/components/ui/image-upload";
 import { Input } from "@/components/ui/input";
-import { useOrigin } from "@/hooks/user-origin";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Billboard } from "@prisma/client";
 import axios from "axios";
@@ -44,8 +43,6 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
   const [loading, setLoading] = useState(false);
   const params = useParams();
   const router = useRouter();
-  const origin = useOrigin();
-
 
   const onSubmit = async (data: BillboardFormValues) => {
     try {
