@@ -8,13 +8,13 @@ export const useOrigin = () => {
       ? window.location.origin
       : "";
 
-      useEffect(() => {
-        setMounted(true)
-      },[])
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-      if (!mounted) {
-        return ''
-      }
+  if (!mounted) {
+    return "";
+  }
 
-      return origin;
+  return origin;
 };
